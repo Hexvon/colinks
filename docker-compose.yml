@@ -1,0 +1,27 @@
+
+services:
+  app:
+    build:
+      context: ./
+    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; uvicorn src.main:app --host 0.0.0.0'
+    volumes:
+      - .:/app
+    ports:
+      - 8008:8000
+    environment:
+      DATABASE_URL: postgresql+psycopg://colinks:colinks@db:5432/colinks
+    depends_on:
+      - db
+  db:
+    image: postgres:16.2-alpine3.19
+    volumes:
+      - "db:/var/lib/postgresql/data/"
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_USER: colinks
+      POSTGRES_PASSWORD: colinks
+      POSTGRES_DB: colinks
+
+volumes:
+  db:
