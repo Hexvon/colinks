@@ -19,4 +19,4 @@ WORKDIR /app
 
 ENV PATH="/opt/venv/bin:$PATH"
 
-COPY . .
+COPY src/ /app

@@ -3,13 +3,11 @@ services:
   app:
     build:
       context: ./
-    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; uvicorn src.main:app --host 0.0.0.0'
-    volumes:
-      - .:/app
+    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; uvicorn colinks_backend.app:app --host 0.0.0.0'
     ports:
       - 8008:8000
     environment:
-      DATABASE_URL: postgresql+psycopg://colinks:colinks@db:5432/colinks
+      DATABASE_URL: "postgresql+asyncpg://colinks:colinks@db:5432/colinks"
     depends_on:
       - db
   db:

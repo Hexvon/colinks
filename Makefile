@@ -1,4 +1,7 @@
 
+include local.env
+export
+
 lock-deps:
 	uv pip compile requirements.in -o requirements.txt
 
@@ -13,3 +16,17 @@ up-service:
 
 up-db:
 	docker-compose up -d db
+
+generate-migration:
+ifeq ($(origin message), undefined)
+	echo Usage: make generate-migration message="<new-migration-description>"
+	exit 1
+endif
+	alembic revision  --autogenerate -m $(message)
+	git add src/migrations/versions/*.py
+
+db-upgrade:
+	alembic upgrade head
+
+db-downgrade:
+	alembic downgrade -1
