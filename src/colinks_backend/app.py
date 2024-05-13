@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from colinks_backend.api.colinks import router as links_router
+from colinks_backend.api.routers import router as links_router
 from colinks_backend.config import CONFIG
 from colinks_backend.db.engine import sessionmanager
 
