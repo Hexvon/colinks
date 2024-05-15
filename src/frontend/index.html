@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание короткой ссылки</title>
+</head>
+<body>
+    <h2>Создание короткой ссылки</h2>
+    <form id="linkForm">
+        <label for="sourceLink">Исходная ссылка:</label>
+        <input type="url" id="sourceLink" name="sourceLink" required>
+        <button type="submit">Создать короткую ссылку</button>
+    </form>
+
+    <h2>Перейти по короткой ссылке</h2>
+    <form id="redirectForm">
+        <label for="shortLink">Короткая ссылка:</label>
+        <input type="text" id="shortLink" name="shortLink" required>
+        <button type="submit">Перейти</button>
+    </form>
+
+    <script src="script.js"></script>
+</body>
+</html>

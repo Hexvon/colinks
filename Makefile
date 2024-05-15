@@ -17,6 +17,9 @@ up-service:
 up-db:
 	docker-compose up -d db
 
+up-test-db:
+	docker-compose up -d test-db
+
 generate-migration:
 ifeq ($(origin message), undefined)
 	echo Usage: make generate-migration message="<new-migration-description>"

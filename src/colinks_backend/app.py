@@ -1,7 +1,9 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
 
+from colinks_backend.api.redirector import router as redirect_router
 from colinks_backend.api.routers import router as links_router
 from colinks_backend.config import CONFIG
 from colinks_backend.db.engine import sessionmanager
@@ -17,6 +19,14 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan, title=CONFIG.project_name, docs_url="/api/docs")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 @app.get("/")
 async def root():
@@ -30,3 +40,4 @@ async def healthcheck():
 
 # Routers
 app.include_router(links_router)
+app.include_router(redirect_router)

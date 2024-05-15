@@ -12,6 +12,7 @@ services:
       - db
   db:
     image: postgres:16.2-alpine3.19
+    restart: always
     volumes:
       - "db:/var/lib/postgresql/data/"
     ports:
@@ -21,5 +22,22 @@ services:
       POSTGRES_PASSWORD: colinks
       POSTGRES_DB: colinks
 
+
+  test-db:
+    image: postgres:16.2-alpine3.19
+    restart: always
+    volumes:
+      - "test-db:/var/lib/postgresql/data/"
+    environment:
+      POSTGRES_USER: colinks
+      POSTGRES_PASSWORD: colinks
+      POSTGRES_DB: colinks
+    ports:
+      - "127.0.0.1:5434:5432"
+    expose:
+      - "5434"
+
+
 volumes:
   db:
+  test-db:
