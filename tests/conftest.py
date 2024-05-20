@@ -1,6 +1,8 @@
+import asyncio
 from contextlib import ExitStack
 
 import pytest
+import pytest_asyncio
 from alembic.config import Config
 from alembic.migration import MigrationContext
 from alembic.operations import Operations
@@ -12,6 +14,14 @@ from colinks_backend.app import app as actual_app
 from colinks_backend.db import Base
 from colinks_backend.db.engine import get_db_session, DatabaseSessionManager
 from test_config import TEST_CONFIG
+
+
+@pytest_asyncio.fixture(scope="session")
+def event_loop(request):
+    loop = asyncio.get_event_loop_policy().new_event_loop()
+    asyncio.set_event_loop(loop)
+    yield loop
+    loop.close()
 
 
 @pytest.fixture(autouse=True)
@@ -28,16 +38,9 @@ def create_test_async_client(app) -> AsyncClient:
     return client
 
 
-# @pytest.fixture(scope="session")
-# def event_loop(request):
-#     loop = asyncio.get_event_loop_policy().new_event_loop()
-#     yield loop
-#     loop.close()
-
-
 def run_migrations(connection: Connection):
     config = Config("CoLinks/alembic.ini")
-    config.set_main_option("script_location", "/home/hexvon/CoLinks/src/migrations")
+    config.set_main_option("script_location", "../src/migrations")
     config.set_main_option("sqlalchemy.url", TEST_CONFIG.test_database_url)
     script = ScriptDirectory.from_config(config)
 
@@ -52,7 +55,7 @@ def run_migrations(connection: Connection):
 
 
 @pytest.fixture(scope="session")
-async def sessionmanager():
+async def sessionmanager(event_loop):
     return DatabaseSessionManager(TEST_CONFIG.test_database_url, {"echo": TEST_CONFIG.echo_sql})
 
 
