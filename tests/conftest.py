@@ -87,7 +87,7 @@ async def db_session(transactional_session):
     yield transactional_session
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="function", autouse=True)
 async def session_override(app, db_session):
     async def get_db_session_override():
         yield db_session
