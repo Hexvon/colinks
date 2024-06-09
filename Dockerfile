@@ -17,6 +17,8 @@ COPY --from=builder /opt/venv /opt/venv
 
 WORKDIR /app
 
-ENV PATH="/opt/venv/bin:$PATH"
+ENV PATH="/opt/venv/bin:$PATH" PYTHONPATH="/app/src"
 
-COPY src/ /app
+COPY / /app
+
+CMD ["sh", "-c", "alembic upgrade head && uvicorn colinks_backend.app:app --host 0.0.0.0"]

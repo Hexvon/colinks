@@ -1,7 +1,8 @@
 import httpx
 from fastapi import APIRouter, HTTPException, Body, Path
 from sqlalchemy import select
-from starlette.status import HTTP_422_UNPROCESSABLE_ENTITY
+from sqlalchemy.exc import IntegrityError
+from starlette.status import HTTP_422_UNPROCESSABLE_ENTITY, HTTP_500_INTERNAL_SERVER_ERROR
 
 from colinks_backend.api.depends import db_session
 from colinks_backend.api.models import Link, SourceLink
@@ -29,8 +30,10 @@ async def create_short_link(
             db.add(Links(short_link=gen_str, source_link=link.source_link))
             await db.commit()
             break
-        except Exception as e:
+        except IntegrityError as e:
             pass
+        except Exception as e:
+            raise HTTPException(HTTP_500_INTERNAL_SERVER_ERROR, e)
     return Link(source_link=link.source_link, short_link=gen_str)
 
 
