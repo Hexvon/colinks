@@ -2,7 +2,7 @@ import httpx
 from fastapi import APIRouter, HTTPException, Body, Path
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
-from starlette.status import HTTP_422_UNPROCESSABLE_ENTITY, HTTP_500_INTERNAL_SERVER_ERROR
+from starlette.status import HTTP_422_UNPROCESSABLE_ENTITY, HTTP_500_INTERNAL_SERVER_ERROR, HTTP_404_NOT_FOUND
 
 from colinks_backend.api.depends import db_session
 from colinks_backend.api.models import Link, SourceLink
@@ -40,10 +40,10 @@ async def create_short_link(
 @router.get("/{short_link}", response_model=None)
 async def get_source_link(
     db: db_session,
-    short_link: str = Path(max_length=7),
+    short_link: str = Path(),
 ):
     url = (await db.scalars(select(Links).where(Links.short_link == short_link))).one_or_none()
     if url is None:
-        raise HTTPException(HTTP_422_UNPROCESSABLE_ENTITY, "Not a valid short link or the link does not exist.")
+        raise HTTPException(HTTP_404_NOT_FOUND, "Not a valid short link or the link does not exist.")
 
     return SourceLink(source_link=url.source_link)
