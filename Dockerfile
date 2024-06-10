@@ -21,4 +21,4 @@ ENV PATH="/opt/venv/bin:$PATH" PYTHONPATH="/app/src"
 
 COPY / /app
 
-CMD ["sh", "-c", "alembic upgrade head && uvicorn colinks_backend.app:app --host 0.0.0.0"]
+CMD ["sh", "-c", "alembic upgrade head && python3 -m colinks_backend"]

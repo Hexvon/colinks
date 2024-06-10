@@ -15,7 +15,7 @@ router = APIRouter(
 @router.get("/{short_link}", response_model=None)
 async def redirect_to_source_link(
     db: db_session,
-    short_link: str = Path(max_length=7),
+    short_link: str = Path(),
 ):
     url = (await db.scalars(select(Links).where(Links.short_link == short_link))).one_or_none()
     if url is None:

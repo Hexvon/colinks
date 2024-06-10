@@ -1,3 +1,5 @@
+import logging
+
 import httpx
 from fastapi import APIRouter, HTTPException, Body, Path
 from sqlalchemy import select
@@ -14,6 +16,8 @@ router = APIRouter(
     tags=["Links"],
 )
 
+logger = logging.getLogger()
+
 
 @router.post("/create", response_model=Link)
 async def create_short_link(
@@ -21,7 +25,9 @@ async def create_short_link(
     link: SourceLink = Body(),
 ):
     async with httpx.AsyncClient() as client:
-        if (await client.get(link.source_link, timeout=10)).status_code != 200:
+        link_response = await client.get(link.source_link, timeout=10)
+        logger.debug(link_response)
+        if link_response.status_code != 200:
             raise HTTPException(HTTP_422_UNPROCESSABLE_ENTITY, "Not a valid URL or the URL does not exist.")
 
     while True:
