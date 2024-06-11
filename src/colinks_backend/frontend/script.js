@@ -3,7 +3,7 @@ document.getElementById('linkForm').addEventListener('submit', async (event) => 
     const sourceLink = document.getElementById('sourceLink').value;
 
     try {
-        const response = await fetch('http://127.0.0.1:8000/api/links/create', {
+        const response = await fetch('https://colinks.onrender.com/api/links/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -28,7 +28,7 @@ document.getElementById('redirectForm').addEventListener('submit', async (event)
     const shortLink = document.getElementById('shortLink').value;
 
     try {
-        const url = `http://127.0.0.1:8000/${shortLink}`;
+        const url = `https://colinks.onrender.com/api/${shortLink}`;
 
         window.location.href = url;
     } catch (error) {

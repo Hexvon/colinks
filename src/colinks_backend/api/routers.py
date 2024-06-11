@@ -9,10 +9,11 @@ from starlette.status import HTTP_422_UNPROCESSABLE_ENTITY, HTTP_500_INTERNAL_SE
 from colinks_backend.api.depends import db_session
 from colinks_backend.api.models import Link, SourceLink
 from colinks_backend.api.ops import generate_random_str
+from colinks_backend.config import CONFIG
 from colinks_backend.db import Links
 
 router = APIRouter(
-    prefix="/api/links",
+    prefix="/links",
     tags=["Links"],
 )
 
@@ -40,7 +41,7 @@ async def create_short_link(
             pass
         except Exception as e:
             raise HTTPException(HTTP_500_INTERNAL_SERVER_ERROR, e)
-    return Link(source_link=link.source_link, short_link=gen_str)
+    return Link(source_link=link.source_link, short_link=CONFIG.host + gen_str)
 
 
 @router.get("/{short_link}", response_model=None)

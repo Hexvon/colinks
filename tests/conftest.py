@@ -10,7 +10,7 @@ from alembic.script import ScriptDirectory
 from asyncpg import Connection
 from httpx import AsyncClient
 
-from colinks_backend.app import app as actual_app
+from colinks_backend.app import api_app as actual_app
 from colinks_backend.db import Base
 from colinks_backend.db.engine import get_db_session, DatabaseSessionManager
 from test_config import TEST_CONFIG

@@ -10,11 +10,11 @@ async def test_colinks_endpoints(db_session: AsyncSession, create_test_async_cli
     client = create_test_async_client
 
     source_link = "https://example.com/"
-    create_rsp = json_or_raise(await client.post("api/links/create", json={"source_link": source_link}))
+    create_rsp = json_or_raise(await client.post("/links/create", json={"source_link": source_link}))
 
     assert create_rsp["source_link"] == source_link
 
-    short_link = create_rsp["short_link"]
-    get_rsp = json_or_raise(await client.get(f"api/links/{short_link}"))
+    short_link = create_rsp["short_link"].split("/")[-1]
+    get_rsp = json_or_raise(await client.get(f"/links/{short_link}"))
 
     assert get_rsp["source_link"] == source_link

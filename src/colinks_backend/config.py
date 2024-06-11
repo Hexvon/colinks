@@ -6,7 +6,8 @@ class Config(BaseSettings):
     echo_sql: bool = True
     test: bool = False
     debug_logs: bool = False
-    project_name: str = "Compress Links API"
+    project_name: str = "Compress Links"
+    host: str
 
 
 CONFIG = Config()
